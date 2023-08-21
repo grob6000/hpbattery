@@ -6,9 +6,10 @@
 
   (title_block
     (title "HP BATTERY")
-    (date "2023-08-15")
-    (rev "1")
+    (date "2023-08-21")
+    (rev "1.1")
     (company "GR")
+    (comment 1 "https://github.com/grob6000/hpbattery")
   )
 
   (lib_symbols
@@ -1655,8 +1656,8 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid f85f1217-8962-4098-abd8-df1533dddaf3)
   )
-  (text "REV1 ADD Q1,R8,R9\n\nREV1.1 U2=TPS73101, U4=S-8261ABJMD, R4=300k, R5=160k"
-    (at 113.03 194.31 0)
+  (text "REV1 ADD Q1,R8,R9\n\nREV1.1 U2=TPS73101, U4=S-8261ABJMD, R4=300k, R5=160k, update notes"
+    (at 17.78 190.5 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid fb655b86-7bc2-46af-af77-4ccf156d46cf)
   )
