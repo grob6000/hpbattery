@@ -7,14 +7,14 @@ While a higher capacity is not necessarily feasible, Li-Po has the advantage of 
 Ni-MH / Ni-CD batteries are notorious for leaking, which is somewhat traded-off against the notoriety of Li-Pos to self-immolate.
 
 ## Features / design goals:
-    - Fit into existing compartment with no modifications
-    - Similar or ideally exceed capacity of standard Ni-Cd or Ni-MH 3xAA types (1200~2200mAh)
-    - Dual charge - USB (externally) or in-place using original HP charger
-    - Battery charge control and protection, OK-ish to accidentally leave on
-    - Maximise battery life:
-        - Minimise Iq
-        - Minimise voltage drop / series resistance of circuits
-        - Optimise Vout to minimise calculator power dissipation
+- Fit into existing compartment with no modifications
+- Similar or ideally exceed capacity of standard Ni-Cd or Ni-MH 3xAA types (1200~2200mAh)
+- Dual charge - USB (externally) or in-place using original HP charger
+- Battery charge control and protection, OK-ish to accidentally leave on
+- Maximise battery life:
+    - Minimise Iq
+    - Minimise voltage drop / series resistance of circuits
+    - Optimise Vout to minimise calculator power dissipation
 
 ## References 
 Thanks to the below references, I intend to utilise elements of these designs but with some functional improvements.
