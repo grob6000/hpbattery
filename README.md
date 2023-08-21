@@ -48,7 +48,7 @@ Thanks to the below references, I intend to utilise elements of these designs bu
      - Typically paired with DW01A, circuit has been kepts equivalent to typical online modules.
 
 ## Function Description
-Refer to schematic
+![Block diagram of battery](https://github.com/grob6000/hpbattery/blob/master/blockdiagram.png?raw=true)
 ### Discharging, calculator on:
  - TP4056 is powered down (VCC < VBAT)
  - B+ supplies TPS73101 regulator, which regulates to 3.60V
