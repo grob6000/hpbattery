@@ -1,16 +1,20 @@
 # HP Battery
 
-Lipo battery for HP35/HP45/HP55/HP65/HP67 calculators.
+A Li-Po battery replacement design for HP35/HP45/HP55/HP65/HP67 calculators. The original batteries had ~ 500mAh capacity, while modern Ni-MH replacements are typically ~1500mAh.
 
- - PCB to fit into HP35/45 calculator
- - Use LiPo cell (1000~2000mAh, depending on size)
- - Features / design goals:
-    - Dual charge - USB (externally) or in-place using original HP charger
-    - Battery charge control and protection, OK-ish to accidentally leave on
-    - Maximise battery life:
-        - Minimise Iq
-        - Minimise voltage drop / series resistance of circuits
-        - Optimise Vout to minimise calculator power dissipation
+While a higher capacity is not necessarily feasible, Li-Po has the advantage of far reduced self-discharge in comparison to Ni-MH, which is an advantage for an intermittently-used device.
+
+Ni-MH / Ni-CD batteries are notorious for leaking, which is somewhat traded-off against the notoriety of Li-Pos to self-immolate.
+
+## Features / design goals:
+- Fit into existing compartment with no modifications
+- Similar or ideally exceed capacity of standard Ni-Cd or Ni-MH 3xAA types (1200~2200mAh)
+- Dual charge - USB (externally) or in-place using original HP charger
+- Battery charge control and protection, OK-ish to accidentally leave on
+- Maximise battery life:
+    - Minimise Iq
+    - Minimise voltage drop / series resistance of circuits
+    - Optimise Vout to minimise calculator power dissipation
 
 ## References 
 Thanks to the below references, I intend to utilise elements of these designs but with some functional improvements.
@@ -73,9 +77,13 @@ Refer to schematic
 
 Refer to spreadsheet
 
-Addition of a series regulator is not an immediately obvious means to maximise efficiency:
+Addition of a series regulator is not an immediately obvious means to maximise efficiency.
   - As input voltage rises, input current to the HP35 rises also, likely due to increased dissipation by the logic circuits as voltage rises, some level of shunt regulation in the power supply input, and particularly the increased current through the LEDs as the voltage rises (fixed resistor current limiting). As such, minimising the Vreg while ensuring operation of the calculator is desirable to minimise the consumption. Measurements of a HP35 were taken with (0.) displayed and (8888888888.-88) displayed, and are included in the excel.
   - Series regulator dropout voltage will result in Vout reaching the low battery threshold (3.50V) at a higher remaining battery capacity than without. As such, selection of a series regulator with extremely low Vdo is important to minimise the unusable capacity. TPS73101 was found which has a Vdo of ~30mV at the current levels anticipated. It is capable of 150mA, which is just enough to supply the calculator.
+
+The discharge is modelled using measured load data from a HP35, an approximate Li-Ion discharge curve from a forgotten online source. I found that for regulation voltages below about 3.8V, the usable operating time of the HP35 would in fact be longer than without a regulator. Minimising the output voltage, assuming the function of the calculator is assured, maximises the running time. I've selected VREG=3.6V, which the model estimates (with a 1500mAh battery) at 16.1h vs. 15.4h for no regulation; i.e. 42mins extra or 4.5% improvement.
+
+![Graph of discharge performance model](https://github.com/grob6000/hpbattery/blob/master/dischargeperformance_3v6.png?raw=true)
 
 ### Why not a switching regulator?
 
