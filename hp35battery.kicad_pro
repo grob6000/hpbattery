@@ -35,8 +35,8 @@
         "other_text_upright": false,
         "pads": {
           "drill": 0.0,
-          "height": 0.6,
-          "width": 1.55
+          "height": 1.8,
+          "width": 2.5
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -481,7 +481,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "hp35battery.step",
+      "step": "hp35battery_rev2.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
