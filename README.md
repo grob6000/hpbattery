@@ -36,24 +36,29 @@ Thanks to the below references, I intend to utilise elements of these designs bu
        - 11mm thick: 2000mAh
  - Charge controller: [TP4056](https://dlnmh9ip6v2uc.cloudfront.net/datasheets/Prototyping/TP4056.pdf)
      - Very common and cheap charge controller for LiPo batteries
- - Regulator: [TPS73101](https://www.ti.com/product/TPS73101-EP)
-     - Ultra low dropout (~30mV)
-     - 150mA current (HP35 calculator uses ~120mA worst case)
- - Output protection diode: [MAX40200](https://www.analog.com/en/products/max40200.html)
-     - Low voltage drop (~50mV) ideal diode
+ - Regulator:
+     - Option 1: [TPS73101](https://www.ti.com/product/TPS73101-EP)
+         - Ultra low dropout (20mV @ 120mA @ 25C)
+         - 150mA current (HP35 calculator uses ~120mA worst case)
+         - 0.4~1mA current consumed
+     - Option 2: [TPS73601](https://www.ti.com/product/TPS73601-EP)
+         - Effectively the same as above, but 400mA current limit
+ - Output protection diode: [MAX40200](https://www.analog.com/en/products/max40200.html) or [MAX40203](https://www.analog.com/en/products/max40203.html)
+     - Low voltage drop (~43mV @ 500mA) ideal diode
+     - MAX40203 consumes less power
  - Battery protection: [S-8261ABJMD](https://www.ablic.com/en/doc/datasheet/battery_protection/S8261_E.pdf)
      - Pin-compatible with [DW01A](https://datasheet.lcsc.com/szlcsc/1901091236_PUOLOP-DW01A_C351410.pdf)
      - Type J: Discharge protection @ 3.0V (DW01 is too low at 2.5V). Overcharge protection at 4.28V.
  - Battery disconnector: [FS8205](https://datasheet.lcsc.com/szlcsc/Fortune-Semicon-FS8205_C32254.pdf)
-     - Typically paired with DW01A, circuit has been kepts equivalent to typical online modules.
+     - Typically paired with DW01A, circuit has been kept equivalent to typical online modules.
 
 ## Function Description
 ![Block diagram of battery](https://github.com/grob6000/hpbattery/blob/master/blockdiagram.png?raw=true)
 ### Discharging, calculator on:
  - TP4056 is powered down (VCC < VBAT)
- - B+ supplies TPS73101 regulator, which regulates to 3.60V
- - Output delivered to calculator via MAX40200
- - Up to 16h run time estimated
+ - B+ supplies regulator, which regulates to 3.60V
+ - Output delivered to calculator via ideal diode
+ - Up to 16h run time estimated (HP35)
 ### Charging, USB:
  - VBUS at Q1 G pulls TP4056 prog down to 5k (250mA)
  - VBUS supplies VCC via D1 (5V down to 4.7V)
@@ -90,3 +95,13 @@ The discharge is modelled using measured load data from a HP35, an approximate L
 In theory, replacing the series linear regulator with a switching regulator may allow use of the battery capacity right down to 3.0V, and more efficiently use the currently wasted energy of the full battery (VB+ > 3.63V) currently being dissipated by the linear reg.
 
 Unfortunately, as the VB+ is close to Vout required, a topology able to deal with VB+ both above and below Vout is needed. The target efficiency to outperform the linear regulator would be 93.8%, which is difficult for low power simple topologies. As such, the linear regulator may remain the optimal solution.
+
+## HP67 - Complications
+
+The HP67, including magnetic card reader, adds complication to the design.
+  1. Power for the card reader (motor included) is sourced directly from the battery terminals, including when plugged in to charger
+  2. Current consumed measured at about 140~180mA (depending on display) in RUN mode, and about 300mA during card writing
+  3. Current decreases slightly with increasing voltage (power still increases as voltage increases)
+  4. Card reading/writing performance can be sensitive to battery voltage
+
+This requires a rethink of the regulator strategy - the regulator may not improve (or may even reduce) run time, however may be of benefit limiting range of input voltage for card reader (suspect anything over 3.8V will work quite fine). TO-DO: v2 to be tested on a HP67 and characterised further.
