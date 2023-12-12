@@ -77,6 +77,8 @@ Thanks to the below references, I intend to utilise elements of these designs bu
  - U4 (S-82612ABJMD) protects battery at VB+ = 3.0V via U5 (FS8205)
    - E.g. if left on accidentally.
    - Reset by applying VCC to TP4056 (will charge battery and raise voltage above recovery threshold for U4)
+### Calculator Off:
+ - Self discharge of the circuit is about 0.16mA (calculated). For a 1500mAh cell, estimated 8700 hours to reach the 3.5V cutoff (362 days; about a year).
 
 ## Notes on optimisation:
 
@@ -84,9 +86,9 @@ Refer to spreadsheet
 
 Addition of a series regulator is not an immediately obvious means to maximise efficiency.
   - As input voltage rises, input current to the HP35 rises also, likely due to increased dissipation by the logic circuits as voltage rises, some level of shunt regulation in the power supply input, and particularly the increased current through the LEDs as the voltage rises (fixed resistor current limiting). As such, minimising the Vreg while ensuring operation of the calculator is desirable to minimise the consumption. Measurements of a HP35 were taken with (0.) displayed and (8888888888.-88) displayed, and are included in the excel.
-  - Series regulator dropout voltage will result in Vout reaching the low battery threshold (3.50V) at a higher remaining battery capacity than without. As such, selection of a series regulator with extremely low Vdo is important to minimise the unusable capacity. TPS73101 was found which has a Vdo of ~30mV at the current levels anticipated. It is capable of 150mA, which is just enough to supply the calculator.
+  - Series regulator dropout voltage will result in Vout reaching the low battery threshold (3.50V) at a higher remaining battery capacity than without. As such, selection of a series regulator with extremely low Vdo is important to minimise the unusable capacity. TPS73601 was found which has a Vdo of ~30mV at the current levels anticipated. It is capable of 400mA, which is just enough to supply the calculator (hp67 with card writer included).
 
-The discharge is modelled using measured load data from a HP35, an approximate Li-Ion discharge curve from a forgotten online source. I found that for regulation voltages below about 3.8V, the usable operating time of the HP35 would in fact be longer than without a regulator. Minimising the output voltage, assuming the function of the calculator is assured, maximises the running time. I've selected VREG=3.6V, which the model estimates (with a 1500mAh battery) at 16.1h vs. 15.4h for no regulation; i.e. 42mins extra or 4.5% improvement.
+The discharge is modelled using measured load data from a HP35, a calculation of the fixed loads in the battery circuit, and an approximate Li-Ion discharge curve from a forgotten online source. I found that for regulation voltages below about 3.8V, the usable operating time of the HP35 would in fact be longer than without a regulator. Minimising the output voltage, assuming the function of the calculator is assured, maximises the running time. I've selected VREG=3.6V, which the model estimates (with a 1500mAh battery) at 16.1h vs. 15.3h for no regulation; i.e. 48mins extra or 4~5% improvement.
 
 ![Graph of discharge performance model](https://github.com/grob6000/hpbattery/blob/master/dischargeperformance_3v6.png?raw=true)
 
@@ -99,9 +101,8 @@ Unfortunately, as the VB+ is close to Vout required, a topology able to deal wit
 ## HP67 - Complications
 
 The HP67, including magnetic card reader, adds complication to the design.
-  1. Power for the card reader (motor included) is sourced directly from the battery terminals, including when plugged in to charger
-  2. Current consumed measured at about 140~180mA (depending on display) in RUN mode, and about 300mA during card writing
-  3. Current decreases slightly with increasing voltage (power still increases as voltage increases)
-  4. Card reading/writing performance can be sensitive to battery voltage
-
-This requires a rethink of the regulator strategy - the regulator may not improve (or may even reduce) run time, however may be of benefit limiting range of input voltage for card reader (suspect anything over 3.8V will work quite fine). TO-DO: v2 to be tested on a HP67 and characterised further.
+  1. Power for the card reader (motor included) is sourced directly from the battery terminals, including when plugged in to charge --> no change to design required.
+  3. Current consumed measured at about 140~180mA (depending on display) in RUN mode, and about 300mA during card writing --> change to TPS73601 regulator (400mA current max)
+  4. Current decreases slightly with increasing voltage (power still increases as voltage increases) --> regulation voltage can be higher (3.8V, rather than 3.6V)
+  5. Card reading/writing performance can be sensitive to battery voltage --> 3.8V seems to be ideal
+  6. Battery terminals are in a slightly different lateral position on this design than the 35/45 design --> design revised to accomodate both types.
